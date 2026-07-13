@@ -47,9 +47,11 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
-            <Button size="lg" className="rounded-full px-8 h-14 text-base gap-2 w-full sm:w-auto">
-              Start Shopping <ArrowRight className="w-4 h-4" />
-            </Button>
+            <Link href="/products" className="w-full sm:w-auto">
+              <Button size="lg" className="rounded-full px-8 h-14 text-base gap-2 w-full">
+                Start Shopping <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
             <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-base bg-background w-full sm:w-auto">
               Become a Vendor
             </Button>

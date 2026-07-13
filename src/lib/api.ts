@@ -109,6 +109,16 @@ export const AuthAPI = {
     body: JSON.stringify({ otp, email }) 
   }),
 
+  forgotPassword: (email: string) => fetchAPI('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email })
+  }),
+
+  confirmForgotPassword: (data: any) => fetchAPI('/auth/confirm-forgot-password', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }),
+
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
