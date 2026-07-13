@@ -1,65 +1,151 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { ArrowRight, Sparkles, TrendingUp, ShieldCheck, Zap, Truck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ProductCard, Product } from '@/components/store/ProductCard';
+
+const trendingProducts: Product[] = [
+  {
+    id: "p1",
+    name: "Sony WH-1000XM5 Wireless Noise Canceling Headphones",
+    vendor: "TechGadgets",
+    price: 348.00,
+    originalPrice: 399.99,
+    rating: 4.8,
+    reviews: 1245,
+    image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=500&q=80",
+    badge: "Bestseller"
+  },
+  {
+    id: "p2",
+    name: "Apple Watch Series 9 GPS 41mm",
+    vendor: "ElectroWorld",
+    price: 399.00,
+    rating: 4.9,
+    reviews: 892,
+    image: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=500&q=80",
+    badge: "New"
+  },
+  {
+    id: "p3",
+    name: "Minimalist Ceramic Coffee Mug",
+    vendor: "HomeEssentials",
+    price: 24.00,
+    originalPrice: 30.00,
+    rating: 4.7,
+    reviews: 128,
+    image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500&q=80"
+  },
+  {
+    id: "p4",
+    name: "Nike Air Max 270 React",
+    vendor: "SneakerHub",
+    price: 160.00,
+    rating: 4.6,
+    reviews: 543,
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80"
+  }
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="flex flex-col gap-24 pb-24">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-secondary/30 pt-16 md:pt-24 lg:pt-32 pb-16 md:pb-24">
+        <div className="container mx-auto px-4 flex flex-col items-center text-center gap-6 md:gap-8">
+          
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary text-sm font-medium border text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span>Introducing the AI Shopping Assistant</span>
+          </div>
+
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight max-w-4xl text-balance animate-in fade-in slide-in-from-bottom-6 duration-700">
+            Find exactly what you need, <br className="hidden md:block"/>
+            <span className="text-muted-foreground">intelligently.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl text-balance animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+            Discover premium products from thousands of trusted vendors. 
+            Powered by AI to help you make smarter purchasing decisions.
           </p>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
+            <Button size="lg" className="rounded-full px-8 h-14 text-base gap-2 w-full sm:w-auto">
+              Start Shopping <ArrowRight className="w-4 h-4" />
+            </Button>
+            <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-base bg-background w-full sm:w-auto">
+              Become a Vendor
+            </Button>
+          </div>
+          
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Features/Benefits */}
+      <section className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="flex flex-col items-center text-center gap-3 p-6 rounded-3xl bg-secondary/20">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <h3 className="font-semibold text-lg">Verified Vendors</h3>
+            <p className="text-sm text-muted-foreground">Every seller on our platform is carefully vetted to ensure quality and authenticity.</p>
+          </div>
+          <div className="flex flex-col items-center text-center gap-3 p-6 rounded-3xl bg-secondary/20">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <h3 className="font-semibold text-lg">AI Recommendations</h3>
+            <p className="text-sm text-muted-foreground">Get personalized product suggestions based on your preferences and natural language queries.</p>
+          </div>
+          <div className="flex flex-col items-center text-center gap-3 p-6 rounded-3xl bg-secondary/20">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+              <Truck className="w-6 h-6" />
+            </div>
+            <h3 className="font-semibold text-lg">Fast & Secure Delivery</h3>
+            <p className="text-sm text-muted-foreground">Track your orders in real-time and enjoy reliable shipping directly from our vendor network.</p>
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Trending Products */}
+      <section className="container mx-auto px-4">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+              <TrendingUp className="w-5 h-5" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Trending Now</h2>
+          </div>
+          <Button variant="ghost" className="hidden sm:flex gap-2">
+            View All <ArrowRight className="w-4 h-4" />
+          </Button>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {trendingProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+        
+        <div className="mt-8 flex justify-center sm:hidden">
+          <Button variant="outline" className="w-full">
+            View All Products
+          </Button>
+        </div>
+      </section>
+      
+      {/* Category Pills Placeholder */}
+      <section className="container mx-auto px-4">
+         <h2 className="text-xl font-bold tracking-tight mb-6 text-center">Shop by Category</h2>
+         <div className="flex flex-wrap items-center justify-center gap-3">
+            {['Electronics', 'Fashion', 'Home & Garden', 'Beauty', 'Sports', 'Toys', 'Automotive', 'Groceries'].map((cat) => (
+              <Button key={cat} variant="secondary" className="rounded-full">
+                {cat}
+              </Button>
+            ))}
+         </div>
+      </section>
+      
     </div>
   );
 }
