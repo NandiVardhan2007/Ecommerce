@@ -48,7 +48,19 @@ export default function ProductDetailsClient({ id }: { id: string }) {
   }
 
   const handleAddToCart = () => {
-    toast.success(`${product.name} added to cart`);
+    try {
+      const cartStr = localStorage.getItem('cart');
+      const cart = cartStr ? JSON.parse(cartStr) : [];
+      // Add multiple times based on quantity
+      for (let i = 0; i < quantity; i++) {
+        cart.push(product);
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      window.dispatchEvent(new Event('cartUpdated'));
+      toast.success('Added to cart');
+    } catch (err) {
+      toast.error('Failed to add to cart');
+    }
   };
 
   const handleSave = () => {

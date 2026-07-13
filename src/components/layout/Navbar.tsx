@@ -1,22 +1,55 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, ShoppingCart, Heart, User, Sparkles } from 'lucide-react';
+import { Search, ShoppingCart, Heart, User, Sparkles, LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { AuthAPI } from '@/lib/api';
 
 export function Navbar() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
+  const [user, setUser] = useState<any>(null);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    // Read user from auth api
+    setUser(AuthAPI.getCurrentUser());
+
+    // Read cart count
+    const updateCartCount = () => {
+      const cartStr = localStorage.getItem('cart');
+      if (cartStr) {
+        try {
+          const cart = JSON.parse(cartStr);
+          setCartCount(cart.length || 0);
+        } catch (e) {
+          setCartCount(0);
+        }
+      }
+    };
+    
+    updateCartCount();
+
+    // Listen for custom cart events
+    window.addEventListener('cartUpdated', updateCartCount);
+    return () => window.removeEventListener('cartUpdated', updateCartCount);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/products?q=${encodeURIComponent(searchQuery)}`);
     }
+  };
+
+  const handleLogout = () => {
+    AuthAPI.logout();
+    setUser(null);
+    router.push('/login');
   };
 
   return (
@@ -56,30 +89,49 @@ export function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-2 ml-auto sm:ml-0">
-          <Link href="/vendor/register" className="hidden lg:flex text-sm font-medium hover:underline underline-offset-4 mr-2 text-muted-foreground">
-            Become a Vendor
-          </Link>
+          {!user && (
+            <Link href="/vendor/register" className="hidden lg:flex text-sm font-medium hover:underline underline-offset-4 mr-2 text-muted-foreground">
+              Become a Vendor
+            </Link>
+          )}
           
           <Link href="/cart">
             <Button variant="ghost" size="icon" aria-label="Cart" className="relative mr-2">
               <ShoppingCart className="h-5 w-5" />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] bg-primary text-primary-foreground">
-                0
-              </Badge>
+              {cartCount > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] bg-primary text-primary-foreground">
+                  {cartCount}
+                </Badge>
+              )}
             </Button>
           </Link>
 
           <div className="hidden md:flex items-center gap-2 border-l pl-4">
-            <Link href="/login">
-              <Button variant="ghost" className="rounded-full">Log in</Button>
-            </Link>
-            <Link href="/register">
-              <Button className="rounded-full">Sign up</Button>
-            </Link>
+            {user ? (
+              <>
+                <Link href={user.role === 'Vendor' ? '/vendor/dashboard' : '/dashboard'}>
+                  <Button variant="ghost" className="rounded-full gap-2">
+                    <LayoutDashboard className="w-4 h-4" /> Dashboard
+                  </Button>
+                </Link>
+                <Button variant="outline" onClick={handleLogout} className="rounded-full gap-2">
+                  <LogOut className="w-4 h-4" /> Log out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button variant="ghost" className="rounded-full">Log in</Button>
+                </Link>
+                <Link href="/register">
+                  <Button className="rounded-full">Sign up</Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Auth (Icon only) */}
-          <Link href="/login" className="md:hidden">
+          <Link href={user ? (user.role === 'Vendor' ? '/vendor/dashboard' : '/dashboard') : "/login"} className="md:hidden">
             <Button variant="ghost" size="icon" aria-label="Profile">
               <User className="h-5 w-5" />
             </Button>
