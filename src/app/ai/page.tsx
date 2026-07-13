@@ -7,6 +7,7 @@ import { Sparkles, Send, Bot, User, Loader2 } from 'lucide-react';
 import { AiAPI, AuthAPI } from '@/lib/api';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
 
 export default function AIPage() {
   const router = useRouter();
@@ -52,10 +53,10 @@ export default function AIPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl h-[calc(100vh-8rem)] flex flex-col">
+    <div className="container mx-auto px-4 py-8 max-w-4xl h-[calc(100vh-5rem)] flex flex-col">
       
-      <div className="flex items-center gap-3 mb-6 bg-secondary/30 p-4 rounded-2xl border">
-        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+      <div className="flex items-center gap-3 mb-6 bg-secondary/30 p-4 rounded-2xl border shrink-0">
+        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
           <Sparkles className="w-5 h-5" />
         </div>
         <div>
@@ -64,7 +65,7 @@ export default function AIPage() {
         </div>
       </div>
 
-      <div className="flex-1 bg-card border rounded-3xl p-6 flex flex-col overflow-hidden shadow-sm">
+      <div className="flex-1 bg-card border rounded-3xl p-6 flex flex-col overflow-hidden shadow-sm min-h-0">
         
         <div className="flex-1 overflow-y-auto pr-4 flex flex-col gap-6 custom-scrollbar">
           {messages.map((msg, i) => (
@@ -81,20 +82,13 @@ export default function AIPage() {
                   ? 'bg-primary text-primary-foreground rounded-tr-sm' 
                   : 'bg-secondary text-foreground rounded-tl-sm'
               }`}>
-                {/* Render simple markdown bolding for the AI */}
-                {msg.content.split('\n').map((line, j) => (
-                   <p key={j} className="mb-2 last:mb-0">
-                     {line.split(/(\*\*.*?\*\*|\*.*?\*)/g).map((part, k) => {
-                       if (part.startsWith('**') && part.endsWith('**')) {
-                         return <strong key={k}>{part.slice(2, -2)}</strong>;
-                       }
-                       if (part.startsWith('*') && part.endsWith('*')) {
-                         return <em key={k}>{part.slice(1, -1)}</em>;
-                       }
-                       return part;
-                     })}
-                   </p>
-                ))}
+                {msg.role === 'assistant' ? (
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
+                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  </div>
+                ) : (
+                  msg.content
+                )}
               </div>
 
               {msg.role === 'user' && (
@@ -117,7 +111,7 @@ export default function AIPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        <form onSubmit={handleSend} className="mt-6 flex items-center gap-2 relative">
+        <form onSubmit={handleSend} className="mt-6 flex items-center gap-2 relative shrink-0">
           <Input 
             value={input}
             onChange={(e) => setInput(e.target.value)}
