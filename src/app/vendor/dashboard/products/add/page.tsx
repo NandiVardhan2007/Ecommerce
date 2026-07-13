@@ -33,11 +33,11 @@ export default function AddProductPage() {
     try {
       await ProductsAPI.createProduct({
         name,
-        price,
-        originalPrice: originalPrice || undefined,
+        price: parseFloat(price),
+        originalPrice: originalPrice ? parseFloat(originalPrice) : undefined,
         category,
         description,
-        stock,
+        stock: parseInt(stock, 10),
         image: imageUrl || undefined,
       });
 

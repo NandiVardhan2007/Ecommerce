@@ -1,9 +1,13 @@
+'use client';
+
 import Image from 'next/link';
 // Wait, I should use next/image for images and next/link for links.
 import Link from 'next/link';
 import { Star, ShoppingCart, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 export interface Product {
   id: string;
@@ -29,8 +33,26 @@ export function ProductCard({ product }: ProductCardProps) {
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toast.success(`${product.name} added to cart`);
+  };
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toast.success(`${product.name} saved to wishlist`);
+  };
+
   return (
-    <div className="group relative flex flex-col gap-3 rounded-2xl border bg-card p-3 transition-all hover:shadow-lg hover:border-border/80">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      whileHover={{ y: -4 }}
+      className="group relative flex flex-col gap-3 rounded-2xl border bg-card p-3 transition-all hover:shadow-lg hover:border-border/80"
+    >
       
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden rounded-xl bg-secondary/50">
@@ -58,12 +80,12 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* Quick Actions overlay */}
         <div className="absolute inset-x-0 bottom-0 p-3 opacity-0 translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 flex justify-center gap-2 bg-gradient-to-t from-black/50 to-transparent">
-           <Button size="sm" variant="secondary" className="w-full gap-2 font-medium">
+           <Button size="sm" variant="secondary" className="w-full gap-2 font-medium" onClick={handleAddToCart}>
              <ShoppingCart className="w-4 h-4" /> Add
            </Button>
         </div>
         
-        <button className="absolute top-2 right-2 z-10 p-2 rounded-full bg-background/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity hover:text-destructive">
+        <button onClick={handleLike} className="absolute top-2 right-2 z-10 p-2 rounded-full bg-background/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity hover:text-destructive">
           <Heart className="w-4 h-4" />
         </button>
       </div>
@@ -92,6 +114,6 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

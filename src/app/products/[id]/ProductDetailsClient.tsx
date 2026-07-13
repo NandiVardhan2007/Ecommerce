@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductsAPI } from '@/lib/api';
 import { Product } from '@/components/store/ProductCard';
+import { toast } from 'sonner';
 
 export default function ProductDetailsClient({ id }: { id: string }) {
   const [product, setProduct] = useState<Product | null>(null);
@@ -45,6 +46,14 @@ export default function ProductDetailsClient({ id }: { id: string }) {
       </div>
     );
   }
+
+  const handleAddToCart = () => {
+    toast.success(`${product.name} added to cart`);
+  };
+
+  const handleSave = () => {
+    toast.success(`${product.name} saved to wishlist`);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -108,10 +117,10 @@ export default function ProductDetailsClient({ id }: { id: string }) {
           <Separator />
 
           <div className="flex flex-col sm:flex-row gap-4 mt-2">
-            <Button size="lg" className="flex-1 rounded-full gap-2">
+            <Button onClick={handleAddToCart} size="lg" className="flex-1 rounded-full gap-2">
               <ShoppingCart className="w-5 h-5" /> Add to Cart
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full px-8 gap-2">
+            <Button onClick={handleSave} size="lg" variant="outline" className="rounded-full px-8 gap-2">
               <Heart className="w-5 h-5" /> Save
             </Button>
           </div>

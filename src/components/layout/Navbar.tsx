@@ -48,8 +48,8 @@ export function Navbar() {
             />
           </form>
           <Link href="/ai">
-            <Button variant="outline" className="rounded-full gap-2 border-primary/20 text-primary hover:bg-primary/5 shadow-sm">
-              <Sparkles className="h-4 w-4" /> Ask AI
+            <Button variant="outline" className="rounded-full gap-2 border-primary/20 text-primary hover:bg-primary/5 shadow-sm group">
+              <Sparkles className="h-4 w-4 animate-pulse group-hover:animate-none" /> Ask AI
             </Button>
           </Link>
         </div>
