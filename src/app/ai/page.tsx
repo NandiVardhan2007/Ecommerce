@@ -67,7 +67,7 @@ export default function AIPage() {
 
       <div className="flex-1 bg-card border rounded-3xl p-6 flex flex-col overflow-hidden shadow-sm min-h-0">
         
-        <div className="flex-1 overflow-y-auto pr-4 flex flex-col gap-6 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto pr-4 flex flex-col gap-6 custom-scrollbar overscroll-contain">
           {messages.map((msg, i) => (
             <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               
