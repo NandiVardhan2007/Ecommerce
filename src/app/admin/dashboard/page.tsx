@@ -10,6 +10,27 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { SalesChart } from '@/components/analytics/SalesChart';
+import { UserGrowthChart } from '@/components/analytics/UserGrowthChart';
+
+const MOCK_SALES_DATA = [
+  { name: 'Mon', sales: 120000 },
+  { name: 'Tue', sales: 145000 },
+  { name: 'Wed', sales: 110000 },
+  { name: 'Thu', sales: 180000 },
+  { name: 'Fri', sales: 250000 },
+  { name: 'Sat', sales: 310000 },
+  { name: 'Sun', sales: 290000 },
+];
+
+const MOCK_USER_DATA = [
+  { name: 'Jan', users: 12000 },
+  { name: 'Feb', users: 19000 },
+  { name: 'Mar', users: 25000 },
+  { name: 'Apr', users: 38000 },
+  { name: 'May', users: 45000 },
+  { name: 'Jun', users: 65000 },
+];
 
 export default function AdminDashboardPage() {
   return (
@@ -112,6 +133,22 @@ export default function AdminDashboardPage() {
                   <h3 className="text-2xl font-bold">12</h3>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
+            <div className="p-6 border rounded-3xl bg-card">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold">Revenue Trend (Last 7 Days)</h3>
+              </div>
+              <SalesChart data={MOCK_SALES_DATA} height={300} />
+            </div>
+
+            <div className="p-6 border rounded-3xl bg-card">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold">User Growth (YTD)</h3>
+              </div>
+              <UserGrowthChart data={MOCK_USER_DATA} height={300} />
             </div>
           </div>
 

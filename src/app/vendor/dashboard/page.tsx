@@ -17,6 +17,18 @@ import {
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ProductsAPI, AuthAPI } from '@/lib/api';
+import { InventoryPieChart } from '@/components/analytics/InventoryPieChart';
+import { SalesChart } from '@/components/analytics/SalesChart';
+
+const MOCK_VENDOR_SALES = [
+  { name: 'Mon', sales: 12000 },
+  { name: 'Tue', sales: 19000 },
+  { name: 'Wed', sales: 15000 },
+  { name: 'Thu', sales: 22000 },
+  { name: 'Fri', sales: 28000 },
+  { name: 'Sat', sales: 35000 },
+  { name: 'Sun', sales: 31000 },
+];
 
 export default function VendorDashboardPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -44,6 +56,18 @@ export default function VendorDashboardPage() {
   const totalProducts = products.length;
   // Compute total inventory value as a mock revenue proxy for now
   const inventoryValue = products.reduce((acc, p) => acc + (p.price * (p.stock || 0)), 0);
+
+  // Compute inventory distribution by category
+  const inventoryData = products.reduce((acc: any[], p) => {
+    const existing = acc.find(item => item.name === (p.category || 'Other'));
+    if (existing) {
+      existing.value += (p.stock || 0);
+    } else {
+      acc.push({ name: p.category || 'Other', value: p.stock || 0 });
+    }
+    return acc;
+  }, []);
+  const displayInventoryData = inventoryData.length > 0 ? inventoryData : [{ name: 'No Products', value: 1 }];
 
   return (
     <div className="flex h-screen bg-background -mt-16">
@@ -152,6 +176,22 @@ export default function VendorDashboardPage() {
                       <h3 className="text-2xl font-bold">0</h3>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
+                <div className="p-6 border rounded-3xl bg-card shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-bold">Revenue Trend</h3>
+                  </div>
+                  <SalesChart data={MOCK_VENDOR_SALES} height={250} />
+                </div>
+                
+                <div className="p-6 border rounded-3xl bg-card shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-bold">Inventory Distribution</h3>
+                  </div>
+                  <InventoryPieChart data={displayInventoryData} height={250} />
                 </div>
               </div>
 
