@@ -1,52 +1,30 @@
+"use client";
+
 import Link from 'next/link';
-import { ArrowRight, Sparkles, TrendingUp, ShieldCheck, Zap, Truck } from 'lucide-react';
+import { ArrowRight, Sparkles, TrendingUp, ShieldCheck, Zap, Truck, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductCard, Product } from '@/components/store/ProductCard';
-
-const trendingProducts: Product[] = [
-  {
-    id: "p1",
-    name: "Sony WH-1000XM5 Wireless Noise Canceling Headphones",
-    vendor: "TechGadgets",
-    price: 348.00,
-    originalPrice: 399.99,
-    rating: 4.8,
-    reviews: 1245,
-    image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=500&q=80",
-    badge: "Bestseller"
-  },
-  {
-    id: "p2",
-    name: "Apple Watch Series 9 GPS 41mm",
-    vendor: "ElectroWorld",
-    price: 399.00,
-    rating: 4.9,
-    reviews: 892,
-    image: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=500&q=80",
-    badge: "New"
-  },
-  {
-    id: "p3",
-    name: "Minimalist Ceramic Coffee Mug",
-    vendor: "HomeEssentials",
-    price: 24.00,
-    originalPrice: 30.00,
-    rating: 4.7,
-    reviews: 128,
-    image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500&q=80"
-  },
-  {
-    id: "p4",
-    name: "Nike Air Max 270 React",
-    vendor: "SneakerHub",
-    price: 160.00,
-    rating: 4.6,
-    reviews: 543,
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80"
-  }
-];
+import { useState, useEffect } from 'react';
+import { ProductsAPI } from '@/lib/api';
 
 export default function Home() {
+  const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrending = async () => {
+      try {
+        const products = await ProductsAPI.getProducts({ sortBy: 'recommended' });
+        // Grab the first 4 for the homepage trending section
+        setTrendingProducts(products.slice(0, 4));
+      } catch (err) {
+        console.error('Failed to fetch trending products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTrending();
+  }, []);
   return (
     <div className="flex flex-col gap-24 pb-24">
       {/* Hero Section */}
@@ -121,11 +99,17 @@ export default function Home() {
           </Button>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {trendingProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center p-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {trendingProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
         
         <div className="mt-8 flex justify-center sm:hidden">
           <Button variant="outline" className="w-full">

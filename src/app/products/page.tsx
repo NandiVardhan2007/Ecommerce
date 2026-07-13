@@ -11,7 +11,9 @@ import { ProductsAPI } from '@/lib/api';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function ProductListingPage() {
+import { Suspense } from 'react';
+
+function ProductListingContent() {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get('category') || '';
   const initialSearch = searchParams.get('q') || '';
@@ -177,5 +179,13 @@ export default function ProductListingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductListingPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center p-24"><Loader2 className="animate-spin" /></div>}>
+      <ProductListingContent />
+    </Suspense>
   );
 }

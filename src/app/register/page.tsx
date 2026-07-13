@@ -31,8 +31,8 @@ export default function RegisterPage() {
         role
       });
       
-      toast.success('Registration successful! Please login.');
-      router.push('/login');
+      toast.success('Registration successful! Please check your email for the OTP.');
+      router.push(`/verify?email=${encodeURIComponent(email)}`);
     } catch (err: any) {
       console.error('Registration error:', err);
       toast.error(err.message || 'An error occurred during registration. Please try again.');
